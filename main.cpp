@@ -184,7 +184,7 @@ struct GetVisitor {
         return make_shared<PolygonVisitor>(polygon);
     }
 
-    auto from(Shape const &shape) -> shared_ptr<Visitor>
+    auto from(Shape const &shape) const -> shared_ptr<Visitor>
     {
         return visit(*this, shape);
     }
@@ -192,14 +192,13 @@ struct GetVisitor {
 
 auto getIntersection(Shape const &s1, Shape const &s2) -> Intersection
 {
-    auto visitor = GetVisitor{}.from(s1);
-    visit(*visitor, s2);
+    auto const visitor = GetVisitor{}.from(s1);
+    return visit(*visitor, s2);
 }
 
 auto main() -> int
 {
-    auto const intersection
-        = getIntersection(Circle{0, {10, 10}}, Polygon{{{10, 10}, {20, 20}}});
+    getIntersection(Circle{0, {10, 10}}, Polygon{{{10, 10}, {20, 20}}});
     cout << endl;
     return 0;
 }
