@@ -15,7 +15,7 @@ auto operator<<(ostream &os, Coordinate const &coordinate) -> ostream &
     return os;
 }
 
-struct Circle {
+struct Circle final {
     int radius;
     Coordinate center;
 };
@@ -27,7 +27,7 @@ auto operator<<(ostream &os, Circle const &circle) -> ostream &
     return os;
 }
 
-struct Rectangle {
+struct Rectangle final {
     Coordinate leftBottom;
     int width;
     int height;
@@ -40,7 +40,7 @@ auto operator<<(ostream &os, Rectangle const &rect) -> ostream &
     return os;
 }
 
-struct Polygon {
+struct Polygon final {
     vector<Coordinate> vertexes;
 };
 
@@ -66,7 +66,7 @@ auto operator<<(ostream &os, Polygon const &polygon) -> ostream &
 
 using Shape = variant<Circle, Rectangle, Polygon>;
 
-struct Intersection {
+struct Intersection final {
     Intersection(Circle const &circle, Circle const &circle2)
     {
         cout << circle << " vs " << circle2;
@@ -99,7 +99,7 @@ struct Visitor {
     virtual auto operator()(const Polygon &polygon) const -> Intersection = 0;
 };
 
-struct CircleVisitor : Visitor {
+struct CircleVisitor final : Visitor {
     CircleVisitor(Circle const &circle)
         : _circle{circle}
     {
@@ -122,7 +122,7 @@ struct CircleVisitor : Visitor {
     }
 };
 
-struct RectangleVisitor : Visitor {
+struct RectangleVisitor final : Visitor {
     RectangleVisitor(Rectangle const &rect)
         : _rect{rect}
     {
@@ -145,7 +145,7 @@ struct RectangleVisitor : Visitor {
     }
 };
 
-struct PolygonVisitor : Visitor {
+struct PolygonVisitor final : Visitor {
     PolygonVisitor(Polygon const &polygon)
         : _polygon{polygon}
     {
@@ -168,7 +168,7 @@ struct PolygonVisitor : Visitor {
     }
 };
 
-struct GetVisitor {
+struct GetVisitor final {
     auto operator()(Circle const &circle) const -> shared_ptr<Visitor>
     {
         return make_shared<CircleVisitor>(circle);
